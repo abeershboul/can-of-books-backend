@@ -35,7 +35,7 @@ async function seedData(){
 
   const scundBook= new bookModle({
     title:'The Old Man and the Sea',
-    descriptione: 't revolves around the bravery of a Cuban fisherman, who has been struggling to reach shore. This story is a symbolic literature.', 
+    description: 't revolves around the bravery of a Cuban fisherman, who has been struggling to reach shore. This story is a symbolic literature.', 
     status:'short story'
   })
 
@@ -43,7 +43,7 @@ async function seedData(){
 
   const thirdBook= new bookModle({
     title:'High Fidelity',
-    descriptione: 'The novel revolves around the main character "Rob", the owner of a vinyl store, and lives in North London. Rob suffers from a broken heart after his girlfriend leaves him, and the events unfold at a fast pace and funny dialogue between the characters',
+    description: 'The novel revolves around the main character "Rob", the owner of a vinyl store, and lives in North London. Rob suffers from a broken heart after his girlfriend leaves him, and the events unfold at a fast pace and funny dialogue between the characters',
     status:'a novel'
   })
 await firstBook.save();
@@ -66,7 +66,7 @@ console.log(err);
     }
 else{
   console.log(result);
-  res.send(result);
+  res.json(result);
 }
   }
   
