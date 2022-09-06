@@ -7,7 +7,7 @@ const mongoose = require('mongoose'); // 0 - import mongoose
 const app = express();
 app.use(cors());
 app.use(express.json());
-const PORT = process.env.PORT||3001; 
+const PORT = process.env.PORT||3000; 
 
 //http:localhost:3001/test
 app.get('/test', (request, response) => {
@@ -15,7 +15,7 @@ response.send('test request received')
 
 })
 // step 1
-mongoose.connect('mongodb://localhost:27017/Bookstore', 
+mongoose.connect('mongodb://localhost:27017/Bookstore2', 
 {useNewUrlParser: true, useUnifiedTopology: true});
 
 const Book = new mongoose.Schema({ //define the schema (structure)
@@ -52,7 +52,7 @@ async function seedData(){
   await thirdBook.save();
 }
  
-seedData();
+//seedData();
 app.get('/test',testHandler);
 // http://localhost:3001/addBook
 app.post('/addBook',addBookHandler);
