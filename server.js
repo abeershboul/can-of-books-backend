@@ -21,7 +21,8 @@ mongoose.connect('mongodb://abeer:1234@ac-basvqfj-shard-00-00.43q8esj.mongodb.ne
 const Book = new mongoose.Schema({ //define the schema (structure)
   title: String,
   description: String,
-  status: String
+  status: String,
+  email:String
 });
 const ModelBooks = mongoose.model('Book', Book); //compile the schem into a model           
 //step 2
@@ -32,19 +33,22 @@ async function seedData(){
   const firstBook = new ModelBooks({
       title: "The Prophet and Other Writings",
       description: "Part of the Knickerbocker Classics series, a modern design makes this timeless book a perfect travel companion.",
-      status: "Available"
+      status: "noval",
+      email:"user"
   })
 
   const secondBook = new ModelBooks({
       title: "The Wind in the Willowst",
       description: "Set in the English countryside, this classic tale follows the adventures of riverside animals",
-      status: "Not Available"
+      status: "short story",
+      email:"user"
   })
 
   const thirdBook = new ModelBooks({
       title: "The Old Man and the Sea",
       description: "It revolves around the bravery of a Cuban fisherman, who has been struggling to reach shore. This story is an allegory.",
-      status: "Avilable"
+      status: "story",
+      email:"user"
   })
 
   await firstBook.save();
@@ -52,7 +56,7 @@ async function seedData(){
   await thirdBook.save();
 }
  
-//seedData();
+seedData();
 app.get('/test',testHandler);
 // http://localhost:3001/addBook
 app.post('/addBook',addBookHandler);
@@ -70,7 +74,8 @@ function testHandler(req,res) {
 
 
 function getBooksHandler(req,res) {
-  ModelBooks.find({},(err,result)=>{
+    const email = req.query.email;
+  ModelBooks.find({email:email},(err,result)=>{
       if(err)
       {
           console.log(err);
@@ -86,14 +91,15 @@ function getBooksHandler(req,res) {
 async function addBookHandler(req,res) {
   console.log(req.body);
   
-  const {bookTitle,bookDescription,bookStatus} = req.body; //Destructuring assignment
+  const {bookTitle,bookDescription,bookStatus,email} = req.body; //Destructuring assignment
   await ModelBooks.create({
       title : bookTitle,
       description : bookDescription,
-      status:bookStatus
+      status:bookStatus,
+      email: email
   });
 
-  ModelBooks.find({},(err,result)=>{
+  ModelBooks.find({email:email},(err,result)=>{
       if(err)
       {
           console.log(err);
@@ -108,9 +114,11 @@ async function addBookHandler(req,res) {
 
 function deleteBookHandler(req,res) {
   const bookId = req.params.id;
+  const email = req.query.email;
+
   ModelBooks.deleteOne({_id:bookId},(err,result)=>{
       
-    ModelBooks.find({},(err,result)=>{
+    ModelBooks.find({email:email},(err,result)=>{
           if(err)
           {
               console.log(err);
@@ -128,14 +136,14 @@ function deleteBookHandler(req,res) {
 
   function updateBookHandler(req,res){
     const id = req.params.id;
-    const {title,description,status} = req.body; //Destructuring assignment
+    const {title,description,status,email} = req.body; //Destructuring assignment
     console.log(req.body);
-    ModelBooks.findByIdAndUpdate(id,{title,description,status},(err,result)=>{
+    ModelBooks.findByIdAndUpdate(id,{title,description,status,email},(err,result)=>{
         if(err) {
             console.log(err);
         }
         else {
-          ModelBooks.find({},(err,result)=>{
+          ModelBooks.find({email:email},(err,result)=>{
                 if(err)
                 {
                     console.log(err);
